@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{68475C6B-304E-F76B-137B-1675D1EEF879}</ProjectGuid>
+    <ProjectGuid>{AA6C5AA6-36D1-F6E6-7592-C6225A82D257}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -79,6 +79,9 @@
     <Compile Include="Assets\Components\Terrain\Blocks\NestBlock.cs" />
     <Compile Include="Assets\Components\UI\UITerrainEditor.cs" />
     <Compile Include="Assets\Components\UI\FlyCamera.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Components\Agents\notes.txt" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
