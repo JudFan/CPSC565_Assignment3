@@ -1,0 +1,9 @@
+The range of the World Coordinates range from X, Z = (1,126) inclusive
+and Y = (0,31) inclusive
+
+Acid = purple
+container = black
+stone = grey
+grass = dark green
+mulch = light green
+nest = red

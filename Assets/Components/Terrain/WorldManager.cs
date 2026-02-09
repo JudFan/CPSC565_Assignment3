@@ -17,6 +17,16 @@ namespace Antymology.Terrain
         public GameObject antPrefab;
 
         /// <summary>
+        /// The prefab containing the queen ant.
+        /// </summary>
+        public GameObject queenAntPrefab;
+
+        /// <summary>
+        /// The number of ants to spawn
+        /// </summary>
+        public int maxAnts;
+
+        /// <summary>
         /// The material used for eech block.
         /// </summary>
         public Material blockMaterial;
@@ -80,15 +90,26 @@ namespace Antymology.Terrain
             Camera.main.transform.position = new Vector3(0 / 2, Blocks.GetLength(1), 0);
             Camera.main.transform.LookAt(new Vector3(Blocks.GetLength(0), 0, Blocks.GetLength(2)));
 
-            GenerateAnts();
+            GenerateAnts(maxAnts);
         }
 
         /// <summary>
         /// TO BE IMPLEMENTED BY YOU
         /// </summary>
-        private void GenerateAnts()
+        private void GenerateAnts(int max)
         {
-            throw new NotImplementedException();
+            int randomX;
+            int randomZ;
+            for(int i = 0; i < max; i++) {
+                randomX = UnityEngine.Random.Range(1, 126);
+                randomZ = UnityEngine.Random.Range(1, 126);
+                Debug.Log("Hello: Ant at X: " + randomX + ", Z: " + randomZ);
+                Instantiate(antPrefab, new Vector3(randomX, 35, randomZ), transform.rotation);
+            }
+            randomX = UnityEngine.Random.Range(1, 126);
+            randomZ = UnityEngine.Random.Range(1, 126);
+            Instantiate(queenAntPrefab, new Vector3(randomX, 35, randomZ), transform.rotation);
+            Debug.Log("Hello: Queen Ant at X: " + randomX + ", Z: " + randomZ);
         }
 
         #endregion
@@ -166,7 +187,7 @@ namespace Antymology.Terrain
             }
 
             Blocks[WorldXCoordinate, WorldYCoordinate, WorldZCoordinate] = toSet;
-
+            Debug.Log("Block set at " + WorldXCoordinate + ", " + WorldYCoordinate + ", " + WorldZCoordinate);
             SetChunkContainingBlockToUpdate
             (
                 WorldXCoordinate,
