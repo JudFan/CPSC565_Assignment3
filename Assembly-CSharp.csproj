@@ -69,6 +69,7 @@
     <Compile Include="Assets\Components\Configuration\ConfigurationManager.cs" />
     <Compile Include="Assets\Components\Terrain\Blocks\AbstractBlock.cs" />
     <Compile Include="Assets\Components\Terrain\Blocks\MulchBlock.cs" />
+    <Compile Include="Assets\Components\Agents\QueenLocation.cs" />
     <Compile Include="Assets\Components\Terrain\Blocks\AcidicBlock.cs" />
     <Compile Include="Assets\Components\Agents\AntScript.cs" />
     <Compile Include="Assets\Components\Terrain\WorldManager.cs" />

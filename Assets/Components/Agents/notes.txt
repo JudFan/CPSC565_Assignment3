@@ -7,3 +7,9 @@ stone = grey
 grass = dark green
 mulch = light green
 nest = red
+
+Directions:
+1: Increase z by 1
+2: Decrease x by 1
+3: Decrease z by 1
+4: Increase x by 1

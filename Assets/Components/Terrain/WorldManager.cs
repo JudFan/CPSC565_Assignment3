@@ -104,7 +104,7 @@ namespace Antymology.Terrain
                 randomX = UnityEngine.Random.Range(1, 126);
                 randomZ = UnityEngine.Random.Range(1, 126);
                 Debug.Log("Hello: Ant at X: " + randomX + ", Z: " + randomZ);
-                Instantiate(antPrefab, new Vector3(0, 35, 0), transform.rotation);
+                Instantiate(antPrefab, new Vector3(randomX, 35, randomZ), transform.rotation);
             }
             randomX = UnityEngine.Random.Range(1, 126);
             randomZ = UnityEngine.Random.Range(1, 120);

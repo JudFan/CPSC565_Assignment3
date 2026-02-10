@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Antymology.NestUI
 {
-    public class NumOfNestUI: Singleton<NumOfNestUI>
+    public class NumOfNestUI : Singleton<NumOfNestUI>
     {
 
         public Text output;
