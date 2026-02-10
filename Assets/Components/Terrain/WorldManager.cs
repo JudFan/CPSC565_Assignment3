@@ -107,7 +107,7 @@ namespace Antymology.Terrain
                 Instantiate(antPrefab, new Vector3(randomX, 35, randomZ), transform.rotation);
             }
             randomX = UnityEngine.Random.Range(1, 126);
-            randomZ = UnityEngine.Random.Range(1, 120);
+            randomZ = UnityEngine.Random.Range(1, 126);
             Instantiate(queenAntPrefab, new Vector3(randomX, 35, randomZ), transform.rotation);
             Debug.Log("Hello: Queen Ant at X: " + randomX + ", Z: " + randomZ);
         }
@@ -416,7 +416,7 @@ namespace Antymology.Terrain
 
             if (updateZ - 1 >= 0)
                 Chunks[updateX, updateY, updateZ - 1].updateNeeded = true;
-            if (updateX + 1 < Chunks.GetLength(2))
+            if (updateZ + 1 < Chunks.GetLength(2))
                 Chunks[updateX, updateY, updateZ + 1].updateNeeded = true;
         }
 
