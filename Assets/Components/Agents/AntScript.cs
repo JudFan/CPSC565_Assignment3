@@ -107,7 +107,7 @@ public class AntScript : MonoBehaviour
         if(blockAhead2 is not AirBlock || (blockAhead3 is AirBlock && blockAhead4 is AirBlock))
         {
             //Cannot climb
-            Debug.Log("Climb is too steep");
+            //Debug.Log("Climb is too steep");
             return;
         }
         if(blockAhead is not AirBlock)
@@ -150,12 +150,19 @@ public class AntScript : MonoBehaviour
 
     void GiveHealth()
     {
-        Collider[] hitColliders = Physics.OverlapBox(transform.position, transform.localScale / 2, transform.rotation, 1);
-        if(hitColliders.Length >= 1)
-        {
-            Debug.Log("Overlapped with " + hitColliders[0]);
-        }
+         
     }
+
+    void OnTriggerEnter(Collider other)
+        {
+            // Log a message to the console
+            Debug.Log("Trigger Entered by: " + other.name);
+
+            if (other.CompareTag("Ant"))
+            {
+                Debug.Log("Ant met an ant at " + transform.position);
+            }
+        }
 
     void Dig()
     {

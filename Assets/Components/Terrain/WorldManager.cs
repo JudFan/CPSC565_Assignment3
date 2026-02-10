@@ -104,10 +104,10 @@ namespace Antymology.Terrain
                 randomX = UnityEngine.Random.Range(1, 126);
                 randomZ = UnityEngine.Random.Range(1, 126);
                 Debug.Log("Hello: Ant at X: " + randomX + ", Z: " + randomZ);
-                Instantiate(antPrefab, new Vector3(randomX, 35, randomZ), transform.rotation);
+                Instantiate(antPrefab, new Vector3(0, 35, 0), transform.rotation);
             }
             randomX = UnityEngine.Random.Range(1, 126);
-            randomZ = UnityEngine.Random.Range(1, 126);
+            randomZ = UnityEngine.Random.Range(1, 120);
             Instantiate(queenAntPrefab, new Vector3(randomX, 35, randomZ), transform.rotation);
             Debug.Log("Hello: Queen Ant at X: " + randomX + ", Z: " + randomZ);
         }
@@ -187,7 +187,7 @@ namespace Antymology.Terrain
             }
 
             Blocks[WorldXCoordinate, WorldYCoordinate, WorldZCoordinate] = toSet;
-            Debug.Log("Block set at " + WorldXCoordinate + ", " + WorldYCoordinate + ", " + WorldZCoordinate);
+            //Debug.Log("Block set at " + WorldXCoordinate + ", " + WorldYCoordinate + ", " + WorldZCoordinate);
             SetChunkContainingBlockToUpdate
             (
                 WorldXCoordinate,
