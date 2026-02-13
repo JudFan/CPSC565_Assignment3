@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Assets\Helpers\NoiseGenerator.cs" />
     <Compile Include="Assets\Components\Agents\QueenAntScript.cs" />
+    <Compile Include="Assets\Components\Agents\GlobalVar.cs" />
     <Compile Include="Assets\Components\Terrain\Chunk.cs" />
     <Compile Include="Assets\Components\Terrain\Blocks\ContainerBlock.cs" />
     <Compile Include="Assets\Helpers\CustomMath.cs" />
@@ -69,7 +70,6 @@
     <Compile Include="Assets\Components\Configuration\ConfigurationManager.cs" />
     <Compile Include="Assets\Components\Terrain\Blocks\AbstractBlock.cs" />
     <Compile Include="Assets\Components\Terrain\Blocks\MulchBlock.cs" />
-    <Compile Include="Assets\Components\Agents\QueenLocation.cs" />
     <Compile Include="Assets\Components\Terrain\Blocks\AcidicBlock.cs" />
     <Compile Include="Assets\Components\Agents\AntScript.cs" />
     <Compile Include="Assets\Components\Terrain\WorldManager.cs" />

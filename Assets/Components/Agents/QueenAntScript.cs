@@ -1,7 +1,7 @@
 using UnityEngine;
 using Antymology.Terrain;
 using Antymology.NestUI;
-using Antymology.QueenLocation;
+using Antymology.GlobalVars;
 using System.Collections.Generic;
 
 public class QueenAntScript : MonoBehaviour
@@ -39,8 +39,10 @@ public class QueenAntScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        QueenLocation.Instance.queenLocation = transform.position;
+        GlobalVar.Instance.queenLocation = transform.position;
         if (health <= 0) {
+            NumOfNestUI.Instance.nestBlockNum = 0;
+            WorldManager.Instance.KillOldAntsSpawnNew();
             Destroy(gameObject);
         }
         AbstractBlock currentBlock = WorldManager.Instance.GetBlock((int)transform.position.x, (int)transform.position.y - 1, (int)transform.position.z);

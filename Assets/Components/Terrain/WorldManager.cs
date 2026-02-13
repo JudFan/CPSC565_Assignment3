@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Antymology.GlobalVars;
 
 namespace Antymology.Terrain
 {
@@ -20,6 +21,11 @@ namespace Antymology.Terrain
         /// The prefab containing the queen ant.
         /// </summary>
         public GameObject queenAntPrefab;
+
+        /// <summary>
+        /// List of ants in the world
+        /// </summary>
+        List<GameObject> ants = new List<GameObject>();
 
         /// <summary>
         /// The number of ants to spawn
@@ -91,12 +97,13 @@ namespace Antymology.Terrain
             Camera.main.transform.LookAt(new Vector3(Blocks.GetLength(0), 0, Blocks.GetLength(2)));
 
             GenerateAnts(maxAnts);
+            GlobalVar.Instance.firstGen = false;
         }
 
         /// <summary>
         /// TO BE IMPLEMENTED BY YOU
         /// </summary>
-        private void GenerateAnts(int max)
+        public void GenerateAnts(int max)
         {
             int randomX;
             int randomZ;
@@ -104,12 +111,24 @@ namespace Antymology.Terrain
                 randomX = UnityEngine.Random.Range(1, 126);
                 randomZ = UnityEngine.Random.Range(1, 126);
                 Debug.Log("Hello: Ant at X: " + randomX + ", Z: " + randomZ);
-                Instantiate(antPrefab, new Vector3(randomX, 35, randomZ), transform.rotation);
+                GameObject ant = Instantiate(antPrefab, new Vector3(randomX, 35, randomZ), transform.rotation);
+                ants.Add(ant);
             }
             randomX = UnityEngine.Random.Range(1, 126);
             randomZ = UnityEngine.Random.Range(1, 126);
             Instantiate(queenAntPrefab, new Vector3(randomX, 35, randomZ), transform.rotation);
             Debug.Log("Hello: Queen Ant at X: " + randomX + ", Z: " + randomZ);
+        }
+
+        public void KillOldAntsSpawnNew()
+        {
+            foreach(GameObject item in ants)
+            {
+                Destroy(item);
+            }
+            ants.Clear();
+            Debug.Log("Queen Died! Spawning new Generation");
+            GenerateAnts(maxAnts);
         }
 
         #endregion

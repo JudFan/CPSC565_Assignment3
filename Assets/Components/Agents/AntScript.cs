@@ -1,6 +1,6 @@
 using UnityEngine;
 using Antymology.Terrain;
-using Antymology.QueenLocation;
+using Antymology.GlobalVars;
 using System.Collections.Generic;
 
 public class AntScript : MonoBehaviour
@@ -24,6 +24,8 @@ public class AntScript : MonoBehaviour
         prevMoveResult = -1;
         prevDigResult = true;
 
+        InitialiseRuleVars();
+
         transform.Rotate(-90.0f, 0.0f, 0.0f, Space.Self);
 
         while(true) {
@@ -33,6 +35,14 @@ public class AntScript : MonoBehaviour
                 break;
             }
             transform.position = transform.position - new Vector3(0, 1, 0);
+        }
+    }
+
+    void InitialiseRuleVars()
+    {
+        if(GlobalVar.Instance.firstGen)
+        {
+            // Set up variables for the rules
         }
     }
 
@@ -52,7 +62,7 @@ public class AntScript : MonoBehaviour
         }
 
         //Move(UnityEngine.Random.Range(1, 5));
-        MoveToCoordinate((int)QueenLocation.Instance.queenLocation.x, (int)QueenLocation.Instance.queenLocation.y, (int)QueenLocation.Instance.queenLocation.z);
+        MoveToCoordinate((int)GlobalVar.Instance.queenLocation.x, (int)GlobalVar.Instance.queenLocation.y, (int)GlobalVar.Instance.queenLocation.z);
 
         //If ant finds itself in the air, fall down
         while(transform.position.y >= 1) {
@@ -167,8 +177,6 @@ public class AntScript : MonoBehaviour
         AbstractBlock blockAhead3;
         AbstractBlock blockAhead4;
 
-        Debug.Log("Old position: " + transform.position);
-        Debug.Log("Chosen Direction: " + moveIndex);
         //int random = UnityEngine.Random.Range(1, 5);
         switch (moveIndex) {
             case 1:
@@ -256,7 +264,6 @@ public class AntScript : MonoBehaviour
                 break;
             }
         }
-        Debug.Log("New position: " + transform.position);
         return 0;
     }
 
