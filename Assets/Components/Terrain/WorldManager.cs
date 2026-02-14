@@ -97,7 +97,6 @@ namespace Antymology.Terrain
             Camera.main.transform.LookAt(new Vector3(Blocks.GetLength(0), 0, Blocks.GetLength(2)));
 
             GenerateAnts(maxAnts);
-            GlobalVar.Instance.firstGen = false;
         }
 
         /// <summary>
@@ -127,7 +126,7 @@ namespace Antymology.Terrain
                 Destroy(item);
             }
             ants.Clear();
-            Debug.Log("Queen Died! Spawning new Generation");
+            //Debug.Log("Queen Died! Spawning new Generation");
             GenerateAnts(maxAnts);
         }
 

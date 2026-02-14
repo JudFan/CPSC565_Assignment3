@@ -17,7 +17,9 @@ namespace Antymology.GlobalVars {
         public int minHealthForNest;
 
         public int minHealthForTransfer;
+        public int minHealthToTransfer;
 
         public float charityModifier;
+
     }
 }

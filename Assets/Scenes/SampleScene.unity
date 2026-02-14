@@ -523,7 +523,7 @@ MonoBehaviour:
     type: 3}
   queenAntPrefab: {fileID: 853967434621999016, guid: 911d7634e56e51743a01f2a35e0c80fd,
     type: 3}
-  maxAnts: 5
+  maxAnts: 0
   blockMaterial: {fileID: 2100000, guid: 4db9d8fce1a69b74f81daf1375c9ed88, type: 2}
 --- !u!4 &964896558
 Transform:
@@ -673,6 +673,10 @@ MonoBehaviour:
   firstGen: 1
   healthPercentMulchHeals: 0.5
   antLearningRate: 5
+  minHealthForNest: 0
+  minHealthForTransfer: 0
+  minHealthToTransfer: 0
+  charityModifier: 0
 --- !u!4 &1157966784
 Transform:
   m_ObjectHideFlags: 0

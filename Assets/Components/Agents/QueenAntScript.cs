@@ -40,21 +40,26 @@ public class QueenAntScript : MonoBehaviour
             }
             transform.position = transform.position - new Vector3(0, 1, 0);
         }
+        GlobalVar.Instance.firstGen = false;
     }
 
     // RuleSet Variables initialised in first Generation of ants. They are modified and carried over new generations
     void InitialiseRuleVars()
     {
-
         if(GlobalVar.Instance.firstGen)
         {
             // Set up variables for the rules
-            minHealthForNest = 1/3 * maxHealth;
+            minHealthForNest = maxHealth/3;
             GlobalVar.Instance.minHealthForNest = minHealthForNest;
         }
         else
         {
             minHealthForNest = GlobalVar.Instance.minHealthForNest;
+        }
+
+        if(minHealthForNest > maxHealth)
+        {
+            minHealthForNest = maxHealth;
         }
     }
 
@@ -102,17 +107,18 @@ public class QueenAntScript : MonoBehaviour
             int difference = NumOfNestUI.Instance.nestHighScore - NumOfNestUI.Instance.nestBlockNum;
             modifier = (int)((1 + difference) * GlobalVar.Instance.antLearningRate); 
             Debug.Log("Modifier in percent: " + modifier);
-        }
         
-        if(minHealthForNest < maxHealth)
-        {
-            minHealthForNest += modifier/100 * maxHealth;
-            GlobalVar.Instance.minHealthForNest = minHealthForNest;
-        }
-        else
-        {
-            minHealthForNest -= modifier/100 * maxHealth;
-            GlobalVar.Instance.minHealthForNest = minHealthForNest;
+        
+            if(minHealthForNest < maxHealth)
+            {
+                minHealthForNest += modifier/100 * maxHealth;
+                GlobalVar.Instance.minHealthForNest = minHealthForNest;
+            }
+            else
+            {
+                minHealthForNest -= modifier/100 * maxHealth;
+                GlobalVar.Instance.minHealthForNest = minHealthForNest;
+            }
         }
     }
 
@@ -389,7 +395,7 @@ public class QueenAntScript : MonoBehaviour
     //RULES BELOW
     void RuleMakeNest() {
         Debug.Log("Queen has " + health + " health, and she needs " + minHealthForNest + " to lay a nest");
-        if(health > minHealthForNest) {
+        if(health >= minHealthForNest && transform.position.y < 31) {
             MakeNestBlock();
             //To climb down nest block so it won't get trapped by building a nest block tower and not being able to climb down.
             int direction = 1;

@@ -51,3 +51,5 @@ Additionally, the Queen also has a Min_Health_For_Nest paramter that decides how
 
 The model has GlobalVar store the parameters Min_Health_for_Transfer, Min_Health_For_Nest, and Charity_Modifier so that future Generations can inherit it. The ants and Queen of the next generations will modify these parameters to suit their goals better.
 
+They modify it by comparing the amount of nest blocks made to a nestHighScore variable tracked by the NumOfNestUI script. If the high score is breached, no learning is needed. Otherwise, a modifier variable made from multiplying the difference between the highest nest blocks made (the high score) and the current generation's made nest blocks and the learning rate, which is then converted into a percentage of the maximum range of the RuleSet parameter to adjust the Ruleset parameters.
+

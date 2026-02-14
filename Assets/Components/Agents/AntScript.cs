@@ -15,10 +15,16 @@ public class AntScript : MonoBehaviour
     bool prevDigResult;
 
     //Ruleset Variables
+
+    // Minimum health for other ant to have to require a health transfer
     private int minHealthForTransfer;
-    private int minHealthForTransfer_max;
+
+    // Amount of health to give in a health transfer
     private float charityModifier;
     private float charityModifier_max = 1.0f;
+
+    // Minimum health for the current ant to be able to do a health transfer
+    private int minHealthToTransfer;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -30,8 +36,6 @@ public class AntScript : MonoBehaviour
         otherAnts = new List<AntScript>();
         prevMoveResult = -1;
         prevDigResult = true;
-
-        minHealthForTransfer_max = maxHealth;
 
         InitialiseRuleVars();
 
@@ -53,7 +57,8 @@ public class AntScript : MonoBehaviour
         if(GlobalVar.Instance.firstGen)
         {
             // Set up variables for the rules
-            minHealthForTransfer = 500;
+            minHealthForTransfer = 300;
+            minHealthToTransfer = 400;
             charityModifier = 0.5f;
             GlobalVar.Instance.minHealthForTransfer = minHealthForTransfer;
             GlobalVar.Instance.charityModifier = charityModifier;
@@ -65,26 +70,47 @@ public class AntScript : MonoBehaviour
             {
                 int difference = NumOfNestUI.Instance.nestHighScore - NumOfNestUI.Instance.nestBlockNum;
                 modifier = (int)((1 + difference) * GlobalVar.Instance.antLearningRate);  
-            }
             
-            if(minHealthForTransfer < maxHealth)
-            {
-                minHealthForTransfer = GlobalVar.Instance.minHealthForTransfer + modifier/100 * minHealthForTransfer_max;
-                
-            }
-            else
-            {
-                minHealthForTransfer = GlobalVar.Instance.minHealthForTransfer - modifier/100 * minHealthForTransfer_max;
-            }
+            
+                if(minHealthForTransfer < maxHealth)
+                {
+                    minHealthForTransfer = GlobalVar.Instance.minHealthForTransfer + modifier/100 * maxHealth;
+                    
+                }
+                else
+                {
+                    minHealthForTransfer = GlobalVar.Instance.minHealthForTransfer - modifier/100 * maxHealth;
+                }
 
-            if(charityModifier < charityModifier_max)
-            {
-                charityModifier = GlobalVar.Instance.charityModifier + modifier/100 * charityModifier_max;
+                if(minHealthToTransfer < maxHealth)
+                {
+                    minHealthToTransfer = GlobalVar.Instance.minHealthToTransfer + modifier/100 * maxHealth;
+                    
+                }
+                else
+                {
+                    minHealthToTransfer = GlobalVar.Instance.minHealthToTransfer - modifier/100 * maxHealth;
+                }
+
+                if(charityModifier < charityModifier_max)
+                {
+                    charityModifier = GlobalVar.Instance.charityModifier + modifier/100 * charityModifier_max;
+                }
+                else
+                {
+                    charityModifier = GlobalVar.Instance.charityModifier - modifier/100 * charityModifier_max;
+                }
             }
-            else
-            {
-                charityModifier = GlobalVar.Instance.charityModifier - modifier/100 * charityModifier_max;
-            }
+        }
+
+        if(minHealthToTransfer > maxHealth)
+        {
+            minHealthToTransfer = maxHealth;
+        }
+
+        if(minHealthForTransfer > maxHealth)
+        {
+            minHealthForTransfer = maxHealth;
         }
     }
 
@@ -103,8 +129,7 @@ public class AntScript : MonoBehaviour
             health -= healthdrop;
         }
 
-        //Move(UnityEngine.Random.Range(1, 5));
-        MoveToCoordinate((int)GlobalVar.Instance.queenLocation.x, (int)GlobalVar.Instance.queenLocation.y, (int)GlobalVar.Instance.queenLocation.z);
+        RuleforMove();
 
         //If ant finds itself in the air, fall down
         while(transform.position.y >= 1) {
@@ -385,12 +410,35 @@ public class AntScript : MonoBehaviour
         return true;
     }
 
+    void Explore()
+    {
+        Move(UnityEngine.Random.Range(1, 5));
+        AbstractBlock block = WorldManager.Instance.GetBlock((int)transform.position.x, (int)transform.position.y - 1, (int)transform.position.z);
+        if(block is MulchBlock)
+        {
+            Dig();
+        }
+    }
+
     //RULES BELOW
     void RuleGiveHealth(AntScript otherAnt)
     {
-        if(otherAnt.health < minHealthForTransfer)
+        if(otherAnt.health <= minHealthForTransfer)
         {
             GiveHealth(otherAnt);
+        }
+    }
+
+    void RuleforMove()
+    {
+        if(health >= minHealthToTransfer)
+        {
+            MoveToCoordinate((int)GlobalVar.Instance.queenLocation.x, (int)GlobalVar.Instance.queenLocation.y, (int)GlobalVar.Instance.queenLocation.z);
+
+        }
+        else
+        {
+            Explore();
         }
     }
 }
