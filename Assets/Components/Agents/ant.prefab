@@ -217,6 +217,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89ebe7c834d31cb43a8f64c1b56a5076, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AntScript
+  health: 0
+  maxHealth: 0
 --- !u!65 &9078169173003482380
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -236,7 +238,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.02, y: -0.02, z: 0.013153626}
+  m_Size: {x: 0.02, y: 0.02, z: 0.013153626}
   m_Center: {x: 0.00011630449, y: -0.00010371582, z: -0.0015764155}
 --- !u!54 &-6952808490256922433
 Rigidbody:

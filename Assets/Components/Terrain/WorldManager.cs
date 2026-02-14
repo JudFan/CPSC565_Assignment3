@@ -110,14 +110,14 @@ namespace Antymology.Terrain
             for(int i = 0; i < max; i++) {
                 randomX = UnityEngine.Random.Range(1, 126);
                 randomZ = UnityEngine.Random.Range(1, 126);
-                Debug.Log("Hello: Ant at X: " + randomX + ", Z: " + randomZ);
+                //Debug.Log("Hello: Ant at X: " + randomX + ", Z: " + randomZ);
                 GameObject ant = Instantiate(antPrefab, new Vector3(randomX, 35, randomZ), transform.rotation);
                 ants.Add(ant);
             }
             randomX = UnityEngine.Random.Range(1, 126);
             randomZ = UnityEngine.Random.Range(1, 126);
             Instantiate(queenAntPrefab, new Vector3(randomX, 35, randomZ), transform.rotation);
-            Debug.Log("Hello: Queen Ant at X: " + randomX + ", Z: " + randomZ);
+            //Debug.Log("Hello: Queen Ant at X: " + randomX + ", Z: " + randomZ);
         }
 
         public void KillOldAntsSpawnNew()

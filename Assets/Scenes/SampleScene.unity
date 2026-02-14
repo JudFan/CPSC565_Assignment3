@@ -152,6 +152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NumOfNestUI
   output: {fileID: 977587462}
   nestBlockNum: 0
+  nestHighScore: 0
 --- !u!4 &506766698
 Transform:
   m_ObjectHideFlags: 0
@@ -639,6 +640,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 977587460}
   m_CullTransparentMesh: 1
+--- !u!1 &1157966782
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1157966784}
+  - component: {fileID: 1157966783}
+  m_Layer: 0
+  m_Name: GlobalVar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1157966783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1157966782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c80c9aa66e5bb16478904db4983d545f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Antymology.GlobalVars.GlobalVar
+  queenLocation: {x: 0, y: 0, z: 0}
+  firstGen: 1
+  healthPercentMulchHeals: 0.5
+  antLearningRate: 5
+--- !u!4 &1157966784
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1157966782}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -20.6684, y: 8.15831, z: 136.3048}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1746901233
 GameObject:
   m_ObjectHideFlags: 0
@@ -717,3 +766,4 @@ SceneRoots:
   - {fileID: 506766698}
   - {fileID: 604122245}
   - {fileID: 1746901236}
+  - {fileID: 1157966784}

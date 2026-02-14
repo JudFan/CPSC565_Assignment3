@@ -7,12 +7,15 @@ using System.Collections.Generic;
 public class QueenAntScript : MonoBehaviour
 {
     public int health;
-    private int maxHealth;
+    public int maxHealth;
     private int healthdrop;
     private bool noAntNearby;
     private List<AntScript> otherAnts;
     private int prevMoveResult;
     bool prevDigResult;
+
+    //Rule Set Variables
+    private int minHealthForNest;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -25,6 +28,9 @@ public class QueenAntScript : MonoBehaviour
         prevMoveResult = -1;
         prevDigResult = true;
 
+
+        InitialiseRuleVars();
+
         transform.Rotate(-90.0f, 0.0f, 0.0f, Space.Self);
         while(true) {
             AbstractBlock block = WorldManager.Instance.GetBlock((int)transform.position.x, (int)transform.position.y - 1, (int)transform.position.z);
@@ -36,15 +42,34 @@ public class QueenAntScript : MonoBehaviour
         }
     }
 
+    // RuleSet Variables initialised in first Generation of ants. They are modified and carried over new generations
+    void InitialiseRuleVars()
+    {
+
+        if(GlobalVar.Instance.firstGen)
+        {
+            // Set up variables for the rules
+            minHealthForNest = 1/3 * maxHealth;
+            GlobalVar.Instance.minHealthForNest = minHealthForNest;
+        }
+        else
+        {
+            minHealthForNest = GlobalVar.Instance.minHealthForNest;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
         GlobalVar.Instance.queenLocation = transform.position;
         if (health <= 0) {
-            NumOfNestUI.Instance.nestBlockNum = 0;
+            NumOfNestUI.Instance.UpdateHighScore();
+            ModifyRuleSetVar();
             WorldManager.Instance.KillOldAntsSpawnNew();
+            NumOfNestUI.Instance.nestBlockNum = 0;
             Destroy(gameObject);
         }
+
         AbstractBlock currentBlock = WorldManager.Instance.GetBlock((int)transform.position.x, (int)transform.position.y - 1, (int)transform.position.z);
         if (currentBlock is AcidicBlock) {
             health -= healthdrop * 2;
@@ -53,9 +78,8 @@ public class QueenAntScript : MonoBehaviour
         {
             health -= healthdrop;
         }
-        if(health > 1/3 * maxHealth) {
-            MakeNestBlock();
-        }
+
+        RuleMakeNest();
 
         //If ant finds itself in the air, fall down
         while(transform.position.y >= 1) {
@@ -65,6 +89,40 @@ public class QueenAntScript : MonoBehaviour
                 break;
             }
             transform.position = transform.position - new Vector3(0, 1, 0);
+        }
+    }
+
+    void ModifyRuleSetVar()
+    {
+        Debug.Log("Queen has modified her rules.");
+        int modifier = 0;
+
+        if(NumOfNestUI.Instance.nestHighScore >= NumOfNestUI.Instance.nestBlockNum)
+        {
+            int difference = NumOfNestUI.Instance.nestHighScore - NumOfNestUI.Instance.nestBlockNum;
+            modifier = (int)((1 + difference) * GlobalVar.Instance.antLearningRate); 
+            Debug.Log("Modifier in percent: " + modifier);
+        }
+        
+        if(minHealthForNest < maxHealth)
+        {
+            minHealthForNest += modifier/100 * maxHealth;
+            GlobalVar.Instance.minHealthForNest = minHealthForNest;
+        }
+        else
+        {
+            minHealthForNest -= modifier/100 * maxHealth;
+            GlobalVar.Instance.minHealthForNest = minHealthForNest;
+        }
+    }
+
+    void Explore()
+    {
+        Move(UnityEngine.Random.Range(1, 5));
+        AbstractBlock block = WorldManager.Instance.GetBlock((int)transform.position.x, (int)transform.position.y - 1, (int)transform.position.z);
+        if(block is MulchBlock)
+        {
+            Dig();
         }
     }
 
@@ -170,8 +228,6 @@ public class QueenAntScript : MonoBehaviour
         AbstractBlock blockAhead3;
         AbstractBlock blockAhead4;
 
-        Debug.Log("Old position: " + transform.position);
-        Debug.Log("Chosen Direction: " + moveIndex);
         //int random = UnityEngine.Random.Range(1, 5);
         switch (moveIndex) {
             case 1:
@@ -259,7 +315,6 @@ public class QueenAntScript : MonoBehaviour
                 break;
             }
         }
-        Debug.Log("New position: " + transform.position);
         return 0;
     }
 
@@ -271,7 +326,6 @@ public class QueenAntScript : MonoBehaviour
 
         if (other.CompareTag("Ant"))
         {
-            Debug.Log("Ant met an ant at " + transform.position);
             AntScript otherAnt =  other.gameObject.GetComponent<AntScript>();
             otherAnts.Add(otherAnt);
         }
@@ -311,8 +365,8 @@ public class QueenAntScript : MonoBehaviour
             transform.position = transform.position - new Vector3(0, 1, 0);
             if(digblock is MulchBlock)
             {
-                health = maxHealth;
-                Debug.Log("Health Refilled!");
+                health = (int)(maxHealth * GlobalVar.Instance.healthPercentMulchHeals);
+                Debug.Log("Queen Health Refilled!");
                 //Can dig
             }
         }
@@ -326,8 +380,29 @@ public class QueenAntScript : MonoBehaviour
         WorldManager.Instance.SetBlock((int)transform.position.x, (int)transform.position.y, (int)transform.position.z, nest);
         Debug.Log("Hello: Nest Block at X: " + transform.position.x + ", Y: " + transform.position.y + ", Z: " + transform.position.z);
         NumOfNestUI.Instance.IncrementNest();
+
         health -= maxHealth * 1/3;
         Vector3 offset = new Vector3(0, 1, 0);
         transform.position = transform.position + offset;
+    }
+
+    //RULES BELOW
+    void RuleMakeNest() {
+        Debug.Log("Queen has " + health + " health, and she needs " + minHealthForNest + " to lay a nest");
+        if(health > minHealthForNest) {
+            MakeNestBlock();
+            //To climb down nest block so it won't get trapped by building a nest block tower and not being able to climb down.
+            int direction = 1;
+            int moveResult = Move(direction);
+            while(moveResult != 0 && direction < 4)
+            {
+                direction++;
+                moveResult = Move(direction);
+            }
+        }
+        else
+        {
+            Explore();
+        }
     }
 }

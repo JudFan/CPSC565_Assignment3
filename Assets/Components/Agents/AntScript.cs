@@ -1,17 +1,24 @@
 using UnityEngine;
 using Antymology.Terrain;
 using Antymology.GlobalVars;
+using Antymology.NestUI;
 using System.Collections.Generic;
 
 public class AntScript : MonoBehaviour
 {
     public int health;
-    private int maxHealth;
+    public int maxHealth;
     private int healthdrop;
     private bool noAntNearby;
     private List<AntScript> otherAnts;
     private int prevMoveResult;
     bool prevDigResult;
+
+    //Ruleset Variables
+    private int minHealthForTransfer;
+    private int minHealthForTransfer_max;
+    private float charityModifier;
+    private float charityModifier_max = 1.0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -23,6 +30,8 @@ public class AntScript : MonoBehaviour
         otherAnts = new List<AntScript>();
         prevMoveResult = -1;
         prevDigResult = true;
+
+        minHealthForTransfer_max = maxHealth;
 
         InitialiseRuleVars();
 
@@ -38,11 +47,44 @@ public class AntScript : MonoBehaviour
         }
     }
 
+    // RuleSet Variables initialised in first Generation of ants. They are modified and carried over new generations
     void InitialiseRuleVars()
     {
         if(GlobalVar.Instance.firstGen)
         {
             // Set up variables for the rules
+            minHealthForTransfer = 500;
+            charityModifier = 0.5f;
+            GlobalVar.Instance.minHealthForTransfer = minHealthForTransfer;
+            GlobalVar.Instance.charityModifier = charityModifier;
+        }
+        else
+        {
+            int modifier = 0;
+            if(NumOfNestUI.Instance.nestHighScore >= NumOfNestUI.Instance.nestBlockNum)
+            {
+                int difference = NumOfNestUI.Instance.nestHighScore - NumOfNestUI.Instance.nestBlockNum;
+                modifier = (int)((1 + difference) * GlobalVar.Instance.antLearningRate);  
+            }
+            
+            if(minHealthForTransfer < maxHealth)
+            {
+                minHealthForTransfer = GlobalVar.Instance.minHealthForTransfer + modifier/100 * minHealthForTransfer_max;
+                
+            }
+            else
+            {
+                minHealthForTransfer = GlobalVar.Instance.minHealthForTransfer - modifier/100 * minHealthForTransfer_max;
+            }
+
+            if(charityModifier < charityModifier_max)
+            {
+                charityModifier = GlobalVar.Instance.charityModifier + modifier/100 * charityModifier_max;
+            }
+            else
+            {
+                charityModifier = GlobalVar.Instance.charityModifier - modifier/100 * charityModifier_max;
+            }
         }
     }
 
@@ -272,8 +314,15 @@ public class AntScript : MonoBehaviour
     {
         Debug.Log("Other ant's health: " + otherAnt.health);
         Debug.Log("Giving health");
-        otherAnt.health += health * 1/2;
-        health = health * 1/2;
+        otherAnt.health += (int)(health * charityModifier);
+        
+        //Ant cannot give health more than the other ant's max health.
+        if(otherAnt.health > otherAnt.maxHealth)
+        {
+            health += otherAnt.health - otherAnt.maxHealth;
+            otherAnt.health = otherAnt.maxHealth;
+        }
+        health -= (int)(health * charityModifier);
     }
 
     void OnTriggerEnter(Collider other)
@@ -284,15 +333,14 @@ public class AntScript : MonoBehaviour
 
         if (other.CompareTag("Ant"))
         {
-            Debug.Log("Ant met an ant at " + transform.position);
             AntScript otherAnt =  other.gameObject.GetComponent<AntScript>();
             otherAnts.Add(otherAnt);
-            if(otherAnt.health < 500)
-            {
-                GiveHealth(otherAnt);
-            }
+            RuleGiveHealth(otherAnt);
+            
         }
     }
+
+    
 
     void OnTriggerExit(Collider other)
     {
@@ -328,7 +376,7 @@ public class AntScript : MonoBehaviour
             transform.position = transform.position - new Vector3(0, 1, 0);
             if(digblock is MulchBlock)
             {
-                health = maxHealth;
+                health = (int)(maxHealth * GlobalVar.Instance.healthPercentMulchHeals);
                 Debug.Log("Health Refilled!");
                 //Can dig
             }
@@ -336,4 +384,15 @@ public class AntScript : MonoBehaviour
         //Can dig
         return true;
     }
+
+    //RULES BELOW
+    void RuleGiveHealth(AntScript otherAnt)
+    {
+        if(otherAnt.health < minHealthForTransfer)
+        {
+            GiveHealth(otherAnt);
+        }
+    }
 }
+
+
